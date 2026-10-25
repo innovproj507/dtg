@@ -13,9 +13,11 @@ export function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const res = NextResponse.rewrite(new URL("/mantenimiento", request.url), { status: 503 });
-  res.headers.set("Retry-After", "3600");
-  return res;
+  // Location relativa: detrás de un proxy inverso el origen interno (localhost:3100) no es público
+  return new NextResponse(null, {
+    status: 307,
+    headers: { Location: "/mantenimiento", "Cache-Control": "no-store" },
+  });
 }
 
 export const config = {
