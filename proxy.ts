@@ -13,11 +13,14 @@ export function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Location relativa: detrás de un proxy inverso el origen interno (localhost:3100) no es público
-  return new NextResponse(null, {
-    status: 307,
-    headers: { Location: "/mantenimiento", "Cache-Control": "no-store" },
-  });
+  // Detrás de un proxy inverso, X-Forwarded-Proto hace que nextUrl sea https aunque la app escuche en http;
+  // Next trataría la reescritura como externa. Se fuerza http para que sea una reescritura interna.
+  const url = request.nextUrl.clone();
+  url.pathname = "/mantenimiento";
+  url.protocol = "http:";
+  const res = NextResponse.rewrite(url, { status: 503 });
+  res.headers.set("Retry-After", "3600");
+  return res;
 }
 
 export const config = {
