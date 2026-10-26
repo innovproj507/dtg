@@ -111,7 +111,7 @@ export default function Enlaces() {
             </span>
             <span className="flex-1">
               <span className="block font-bold">Ver sitio web</span>
-              <span className="block text-xs text-slate-500">Prueba el configurador 3D</span>
+              <span className="block text-xs text-slate-500">Conoce nuestra historia y servicios</span>
             </span>
             <span className="text-slate-300">→</span>
           </a>

@@ -45,3 +45,7 @@ body {
 @keyframes spin { to { transform: rotate(360deg); } }
 .progress { animation: slide 1.8s ease-in-out infinite; }
 @keyframes slide { 0% { transform: translateX(-100%); } 100% { transform: translateX(300%); } }
+
+.wa-pulse { animation: wa-pulse 2.2s ease-out infinite; }
+@keyframes wa-pulse { 0% { transform: scale(1); opacity: .55; } 100% { transform: scale(1.7); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .wa-pulse { animation: none; } }

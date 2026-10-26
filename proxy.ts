@@ -25,5 +25,5 @@ export function proxy(request: NextRequest) {
 
 export const config = {
   // excluye recursos internos y archivos estáticos (logo, favicon, imágenes)
-  matcher: ["/((?!_next/|favicon.ico|.*\\.(?:png|jpg|jpeg|svg|webp|ico|css|js|txt|xml)$).*)"],
+  matcher: ["/((?!_next/|favicon.ico|.*\\.(?:png|jpg|jpeg|svg|webp|avif|gif|ico|css|js|txt|xml|mp4|webm|woff|woff2)$).*)"],
 };
