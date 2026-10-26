@@ -250,8 +250,28 @@ export default function Home() {
             <h2 className={h2}>Donde cada puntada toma forma</h2>
           </motion.div>
 
-          <div className="mt-10 grid auto-rows-[160px] grid-cols-2 gap-3 md:auto-rows-[230px] md:grid-cols-4 md:gap-4">
-            <motion.div {...reveal} className="relative col-span-2 row-span-2 overflow-hidden rounded-2xl bg-black shadow-lg">
+          <div className="mt-10 grid grid-cols-2 gap-3 md:auto-rows-[230px] md:grid-cols-3 md:gap-4">
+            {/* Guayabera: 4:5, el texto va dentro de la imagen, por eso no se recorta a los lados */}
+            <motion.div
+              {...reveal}
+              className="group col-span-2 aspect-[4/5] overflow-hidden rounded-2xl shadow-lg md:col-span-1 md:row-span-2 md:aspect-auto"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/fotos/camisas-lino.jpg"
+                alt="Camisa de lino blanca con bordado artesanal geométrico en el pecho"
+                width={800}
+                height={1000}
+                loading="lazy"
+                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+            </motion.div>
+
+            <motion.div
+              {...reveal}
+              transition={{ ...reveal.transition, delay: 0.08 }}
+              className="relative col-span-2 aspect-square overflow-hidden rounded-2xl bg-black shadow-lg md:col-span-1 md:row-span-2 md:aspect-auto"
+            >
               <video
                 src="/video/25-anos.mp4?v=2"
                 poster="/video/25-anos.jpg?v=2"
@@ -264,33 +284,73 @@ export default function Home() {
                 preload="metadata"
               />
             </motion.div>
+
             {[
-              ["/fotos/taller-vertical.jpg", "row-span-2", "Aguja de bordadora sobre un bordado en punto de cruz"],
-              ["/fotos/foto5.jpg", "", "Conos de hilo en la máquina"],
-              ["/fotos/foto6.jpg", "", "Agujas y tensores de la bordadora"],
+              ["/fotos/foto5.jpg", "aspect-[4/3] md:aspect-auto", "Conos de hilo en la máquina"],
+              ["/fotos/foto6.jpg", "aspect-[4/3] md:aspect-auto", "Agujas y tensores de la bordadora"],
+              [
+                "/fotos/taller-vertical.jpg",
+                "aspect-[3/5] md:row-span-2 md:aspect-auto",
+                "Aguja de bordadora sobre un bordado en punto de cruz",
+              ],
+              [
+                "/fotos/foto7.jpg",
+                "aspect-[3/5] md:col-span-2 md:row-span-2 md:aspect-auto",
+                "Paleta de hilos de colores en el taller",
+              ],
             ].map(([src, cls, alt], i) => (
               <motion.div
                 key={src}
                 {...reveal}
-                transition={{ ...reveal.transition, delay: 0.08 * (i + 1) }}
+                transition={{ ...reveal.transition, delay: 0.08 * (i + 2) }}
                 className={`group overflow-hidden rounded-2xl shadow-md ${cls}`}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={src} alt={alt} loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                <img
+                  src={src}
+                  alt={alt}
+                  loading="lazy"
+                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
               </motion.div>
             ))}
-            <motion.div {...reveal} className="group col-span-2 overflow-hidden rounded-2xl shadow-md">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/fotos/foto7.jpg" alt="Paleta de hilos de colores" loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
-            </motion.div>
-            <motion.div
-              {...reveal}
-              className="col-span-2 flex flex-col justify-center rounded-2xl p-8 text-white shadow-md"
-              style={{ background: `linear-gradient(135deg, ${INK}, #1d3a4a)` }}
-            >
-              <span className="text-5xl font-black md:text-6xl" style={{ color: GOLD }}>25 años</span>
-              <p className="mt-2 text-white/80">bordando identidades en Panamá, con un legado familiar desde 1946.</p>
-            </motion.div>
+          </div>
+
+          {/* Banners: 2:1 con el texto dentro de la imagen (no recortar) */}
+          <div className="mt-4 grid gap-4 md:grid-cols-2">
+            {[
+              {
+                src: "/fotos/detalles-bordado.jpg",
+                alt: "Detalles de bordado floral en el cuello de una camisa y en el bolsillo de una camisa verde",
+                href: "#contacto",
+                external: false,
+              },
+              {
+                src: "/fotos/polos-bordados.jpg",
+                alt: "Polos bordados: detalles que marcan estilo. Cotizar por WhatsApp",
+                href: waLink("Hola, quiero cotizar polos bordados"),
+                external: true,
+              },
+            ].map((b, i) => (
+              <motion.a
+                key={b.src}
+                {...reveal}
+                transition={{ ...reveal.transition, delay: 0.1 * i }}
+                href={b.href}
+                {...(b.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                className="group block overflow-hidden rounded-2xl shadow-md transition-shadow hover:shadow-xl"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={b.src}
+                  alt={b.alt}
+                  width={1600}
+                  height={800}
+                  loading="lazy"
+                  className="aspect-[2/1] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                />
+              </motion.a>
+            ))}
           </div>
         </div>
       </section>
