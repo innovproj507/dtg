@@ -1,19 +1,32 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
+const SITE_HOST = "bordadosdtg.com";
+
 // Modo mantenimiento: con MAINTENANCE_MODE=true toda la web muestra /mantenimiento.
 // /enlaces sigue activa para la bio de Instagram.
 const ALLOWED = ["/mantenimiento", "/enlaces"];
 
 export function proxy(request: NextRequest) {
+  const { pathname, search } = request.nextUrl;
+
+  // Detrás de Cloudflare/Apache la app escucha en http; los datos reales del visitante llegan en cabeceras.
+  const host = (request.headers.get("x-forwarded-host") ?? "").split(",")[0].trim().toLowerCase();
+  const proto = (request.headers.get("x-forwarded-proto") ?? "").split(",")[0].trim().toLowerCase();
+
+  // 1) Un solo dominio canónico: www -> sin www, y siempre https (evita contenido duplicado y tráfico sin cifrar)
+  if (host === `www.${SITE_HOST}` || (host === SITE_HOST && proto === "http")) {
+    return NextResponse.redirect(`https://${SITE_HOST}${pathname}${search}`, 308);
+  }
+
+  // 2) Modo mantenimiento
   if (process.env.MAINTENANCE_MODE !== "true") return NextResponse.next();
 
-  const { pathname } = request.nextUrl;
   if (ALLOWED.some((p) => pathname === p || pathname.startsWith(p + "/"))) {
     return NextResponse.next();
   }
 
-  // Detrás de un proxy inverso, X-Forwarded-Proto hace que nextUrl sea https aunque la app escuche en http;
+  // X-Forwarded-Proto hace que nextUrl sea https aunque la app escuche en http;
   // Next trataría la reescritura como externa. Se fuerza http para que sea una reescritura interna.
   const url = request.nextUrl.clone();
   url.pathname = "/mantenimiento";

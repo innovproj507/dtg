@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { waLink } from "@/lib/contact";
+import { CONTACT, waLink } from "@/lib/contact";
 import { motion } from "framer-motion";
 
 
@@ -37,17 +37,23 @@ const h2 = "mt-3 text-3xl font-black tracking-tight md:text-5xl";
 
 export default function Home() {
   return (
-    <main className="bg-[#f7f6f2] text-[#0f1e2b]">
+    <div className="bg-[#f7f6f2] text-[#0f1e2b]">
+      <a
+        href="#contenido"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:font-bold focus:shadow-xl"
+      >
+        Saltar al contenido
+      </a>
       {/* NAV */}
       <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/90 backdrop-blur-lg">
         <div className={`${wrap} flex items-center justify-between py-2`}>
           <a href="#inicio" className="flex items-center gap-4">
-            <Image src="/logo.png" alt="DTG Bordados" width={84} height={90} priority className="h-[72px] w-auto md:h-[88px]" />
+            <Image src="/logo.png" alt="DTG Bordados, ir al inicio" width={84} height={90} priority className="h-[72px] w-auto md:h-[88px]" />
             <span className="hidden text-base font-black uppercase tracking-[0.3em] lg:block">
               DTG <span style={{ color: GOLD }}>Bordados</span>
             </span>
           </a>
-          <nav className="hidden gap-9 text-sm font-semibold text-slate-600 md:flex">
+          <nav aria-label="Principal" className="hidden gap-9 text-sm font-semibold text-slate-600 md:flex">
             {[
               ["Historia", "#nosotros"],
               ["Taller", "#taller"],
@@ -70,6 +76,7 @@ export default function Home() {
         </div>
       </header>
 
+      <main id="contenido">
       {/* HERO */}
       <section id="inicio" className="relative overflow-hidden bg-[#0f1e2b]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -91,7 +98,7 @@ export default function Home() {
               className="inline-block rounded-full border border-white/25 bg-white/10 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.25em] backdrop-blur"
               style={{ color: "#7fd6e6" }}
             >
-              Bordado profesional
+              Bordados profesionales en Panamá
             </span>
             <h1 className="mt-6 text-5xl font-black leading-[0.98] tracking-tight md:text-7xl">
               Tu marca,
@@ -99,8 +106,8 @@ export default function Home() {
               <span style={{ color: "#4fc3d9" }}>puntada</span> a <span style={{ color: GOLD }}>puntada.</span>
             </h1>
             <p className="mt-6 max-w-lg text-lg text-white/85">
-              Bordados de alta densidad sobre prendas premium para empresas, equipos y marcas que quieren verse
-              impecables. Desde una pieza hasta producción por lotes.
+              Bordados de alta densidad en Panamá sobre prendas premium, para empresas, equipos y marcas que quieren
+              verse impecables. Logos, uniformes y gorras: desde una pieza hasta producción por lotes.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <a
@@ -200,6 +207,8 @@ export default function Home() {
                 <img
                   src="/fotos/panama.jpg"
                   alt="Mapa de Panamá bordado a máquina sobre tela dorada"
+                  width={1200}
+                  height={1500}
                   loading="lazy"
                   className="aspect-[4/5] w-full rounded-3xl object-cover shadow-2xl"
                 />
@@ -244,8 +253,8 @@ export default function Home() {
           <div className="mt-10 grid auto-rows-[160px] grid-cols-2 gap-3 md:auto-rows-[230px] md:grid-cols-4 md:gap-4">
             <motion.div {...reveal} className="relative col-span-2 row-span-2 overflow-hidden rounded-2xl bg-black shadow-lg">
               <video
-                src="/video/25-anos.mp4"
-                poster="/video/25-anos.jpg"
+                src="/video/25-anos.mp4?v=2"
+                poster="/video/25-anos.jpg?v=2"
                 className="h-full w-full object-cover"
                 autoPlay
                 muted
@@ -305,7 +314,9 @@ export default function Home() {
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={img}
-                    alt={t}
+                    alt={`${t}: ${d.split(".")[0]}`}
+                    width={600}
+                    height={375}
                     loading="lazy"
                     className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
@@ -373,19 +384,24 @@ export default function Home() {
               e.preventDefault();
               const f = new FormData(e.currentTarget);
               const msg = `Hola, soy ${f.get("nombre")}. ${f.get("mensaje")}`;
-              window.open(waLink(msg), "_blank");
+              window.open(waLink(msg), "_blank", "noopener,noreferrer");
             }}
             className="grid gap-3 rounded-3xl bg-white p-7 shadow-2xl"
           >
             <input
               name="nombre"
               required
+              maxLength={80}
+              autoComplete="name"
+              aria-label="Tu nombre"
               placeholder="Tu nombre"
               className="rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-[#199cb5]"
             />
             <textarea
               name="mensaje"
               required
+              maxLength={800}
+              aria-label="Tu mensaje"
               rows={4}
               placeholder="¿Qué prendas y cuántas piezas?"
               className="rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-[#199cb5]"
@@ -397,11 +413,36 @@ export default function Home() {
         </div>
       </section>
 
+      </main>
+
       {/* FOOTER */}
-      <footer className="bg-white py-10">
-        <div className={`${wrap} flex flex-col items-center justify-between gap-6 md:flex-row`}>
-          <Image src="/logo.png" alt="DTG Bordados" width={110} height={118} className="h-[110px] w-auto" />
-          <p className="text-sm text-slate-500">© Bordados DTG, S. A. · El arte del bordado, una historia de familia</p>
+      <footer className="bg-white pb-28 pt-10 md:pb-24">
+        <div className={`${wrap} grid items-center gap-8 md:grid-cols-[auto_1fr_auto]`}>
+          <Image src="/logo.png" alt="DTG Bordados" width={110} height={118} className="mx-auto h-[110px] w-auto md:mx-0" />
+          <address className="text-center text-sm not-italic leading-relaxed text-slate-600 md:text-left">
+            <strong className="block text-base text-[#0f1e2b]">Bordados DTG, S. A.</strong>
+            {CONTACT.address && <span className="block">{CONTACT.address}, Panamá</span>}
+            {CONTACT.phone && (
+              <a href={`tel:+${CONTACT.phone.replace(/\D/g, "")}`} className="block hover:text-[#199cb5]">
+                Tel. +{CONTACT.phone.replace(/^(\d{3})(\d{4})(\d{4})$/, "$1 $2-$3")}
+              </a>
+            )}
+            {CONTACT.instagram && (
+              <a
+                href={`https://www.instagram.com/${CONTACT.instagram}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block hover:text-[#199cb5]"
+              >
+                Instagram @{CONTACT.instagram}
+              </a>
+            )}
+          </address>
+          <p className="text-center text-sm text-slate-500 md:text-right">
+            © Bordados DTG, S. A.
+            <br />
+            El arte del bordado, una historia de familia
+          </p>
         </div>
       </footer>
 
@@ -423,6 +464,6 @@ export default function Home() {
           </svg>
         </span>
       </a>
-    </main>
+    </div>
   );
 }

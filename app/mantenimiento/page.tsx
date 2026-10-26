@@ -3,9 +3,9 @@ import Image from "next/image";
 import { CONTACT, waLink } from "@/lib/contact";
 
 export const metadata: Metadata = {
-  title: "En mantenimiento | DTG Bordados",
+  title: "En mantenimiento",
   description: "Estamos mejorando nuestra web. Volvemos muy pronto.",
-  robots: { index: false },
+  robots: { index: false, follow: false },
 };
 
 const TEAL = "#199cb5";

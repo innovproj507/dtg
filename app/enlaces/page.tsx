@@ -3,8 +3,9 @@ import Image from "next/image";
 import { CONTACT, waLink } from "@/lib/contact";
 
 export const metadata: Metadata = {
-  title: "DTG Bordados | Enlaces",
-  description: "Cotiza tu bordado por WhatsApp y conoce nuestros servicios.",
+  title: "Enlaces",
+  description: "Cotiza tu bordado por WhatsApp y conoce los servicios de DTG Bordados en Panamá.",
+  alternates: { canonical: "/enlaces" },
 };
 
 const TEAL = "#199cb5";
