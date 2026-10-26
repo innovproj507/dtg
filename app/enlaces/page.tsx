@@ -4,7 +4,7 @@ import { CONTACT, waLink } from "@/lib/contact";
 
 export const metadata: Metadata = {
   title: "Enlaces",
-  description: "Cotiza tu bordado por WhatsApp y conoce los servicios de DTG Bordados en Panamá.",
+  description: "Cotiza tu bordado o impresión digital DTF por WhatsApp y conoce los servicios de DTG Bordados en Panamá.",
   alternates: { canonical: "/enlaces" },
 };
 
@@ -17,6 +17,7 @@ const SERVICES = [
   ["Gorras y accesorios", "Gorras, bolsos, toallas y más", "Hola, quiero cotizar gorras bordadas"],
   ["Personalización", "Nombres y cargos en cada prenda", "Hola, quiero personalizar prendas con nombres"],
   ["Digitalización de arte", "Convertimos tu logo en puntadas", "Hola, necesito digitalizar mi logo para bordado"],
+  ["Impresión digital DTF", "Diseños a todo color en algodón y poliéster", "Hola, quiero cotizar una impresión digital DTF"],
 ] as const;
 
 const ICONS = {

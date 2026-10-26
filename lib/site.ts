@@ -5,9 +5,9 @@ export const SITE = {
   host: "bordadosdtg.com",
   name: "DTG Bordados",
   legalName: "Bordados DTG, S. A.",
-  title: "Bordados en Panamá | Uniformes y logos | DTG Bordados",
+  title: "Bordados e Impresión DTF en Panamá | DTG Bordados",
   description:
-    "Bordados profesionales en Panamá: logos, uniformes, gorras y nombres personalizados. Bordado de alta densidad, producción por lotes y una historia familiar desde 1946. Cotiza por WhatsApp.",
+    "Bordados profesionales e impresión digital DTF en Panamá: logos, uniformes, gorras y nombres personalizados. Producción por lotes y una historia familiar desde 1946. Cotiza por WhatsApp.",
   founded: "2001",
   ogImage: "/og.jpg",
 };
@@ -17,6 +17,7 @@ const SERVICES = [
   ["Personalización", "Nombres, cargos y detalles individuales en cada prenda."],
   ["Producción por lotes", "Control de color y calidad pieza por pieza, con entregas programadas."],
   ["Digitalización de arte", "Conversión de logos en mapas de puntadas optimizados para bordado."],
+  ["Impresión digital DTF", "Impresión a todo color, con degradados y detalles finos, sobre textiles de algodón y poliéster."],
 ];
 
 /** Datos estructurados (JSON-LD) para Google: negocio local + sitio web. */
@@ -53,6 +54,7 @@ export function jsonLd() {
         foundingDate: SITE.founded,
         slogan: "El arte del bordado, una historia de familia",
         areaServed: { "@type": "Country", name: "Panamá" },
+        ...(CONTACT.email && { email: CONTACT.email }),
         ...(CONTACT.phone && { telephone: `+${CONTACT.phone.replace(/\D/g, "")}` }),
         ...(address && { address }),
         ...(CONTACT.mapsUrl && { hasMap: CONTACT.mapsUrl }),
