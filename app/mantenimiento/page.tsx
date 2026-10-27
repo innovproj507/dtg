@@ -51,6 +51,11 @@ export default function Mantenimiento() {
               Escríbenos por WhatsApp
             </a>
           )}
+          {CONTACT.email && (
+            <a href={`mailto:${CONTACT.email}`} className="rounded-full border-2 border-[#0f1e2b] px-7 py-3.5 font-bold">
+              Escríbenos por correo
+            </a>
+          )}
           {CONTACT.instagram && (
             <a href={`https://instagram.com/${CONTACT.instagram}`} className="rounded-full border-2 border-[#0f1e2b] px-7 py-3.5 font-bold">
               Síguenos en Instagram

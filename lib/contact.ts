@@ -3,7 +3,7 @@
 export const CONTACT = {
   whatsapp: "50760256779", // solo dígitos con código de país, ej. "50761234567"
   instagram: "bordadosdtg", // usuario sin @, ej. "bordadosdtg"
-  email: "", // ej. "info@bordadosdtg.com" (se muestra en Contacto si lo llenas)
+  email: "ventas@bordadosdtg.com", // se muestra en Contacto, pie de página, /enlaces, /mantenimiento y datos estructurados
   phone: "50760256779", // ej. "+50761234567"
   mapsUrl: "", // enlace de Google Maps
   address: "El Dorado, Villa de las Fuentes No. 2", // ej. "Ciudad de Panamá"

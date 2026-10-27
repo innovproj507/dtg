@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useState } from "react";
 import { CONTACT, waLink } from "@/lib/contact";
 import { motion } from "framer-motion";
 
@@ -35,7 +36,68 @@ const wrap = "mx-auto w-full max-w-7xl px-6 md:px-10";
 const eyebrow = "text-xs font-bold uppercase tracking-[0.3em]";
 const h2 = "mt-3 text-3xl font-black tracking-tight md:text-5xl";
 
+/** Trazados de icono: los mismos que usa /enlaces, para que se vean igual en todo el sitio. */
+const ICONS = {
+  wa: "M3 21l1.6-4.7A8.5 8.5 0 1 1 8 19.6L3 21zm5.6-12c.2 2.7 2.9 5.4 5.6 5.6l1.3-1.3-2-1-1 .8c-.9-.4-1.9-1.4-2.3-2.3l.8-1-1-2L8.6 9z",
+  ig: "M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4zm5 5a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm5.5-2.2h.01",
+  mail: "M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6zm0 1 9 6 9-6",
+};
+
+/**
+ * Atajos de la cabecera. Sólo aparece lo que esté relleno en lib/contact.ts,
+ * igual que en /enlaces: si se vacía un dato, el icono desaparece solo.
+ */
+const HEADER_LINKS = [
+  CONTACT.whatsapp && { href: waLink(), label: "Escribir por WhatsApp", d: ICONS.wa, externo: true },
+  CONTACT.instagram && {
+    href: `https://www.instagram.com/${CONTACT.instagram}`,
+    label: `Instagram @${CONTACT.instagram}`,
+    d: ICONS.ig,
+    externo: true,
+  },
+  CONTACT.email && { href: `mailto:${CONTACT.email}`, label: `Escribir a ${CONTACT.email}`, d: ICONS.mail, externo: false },
+].filter(Boolean) as { href: string; label: string; d: string; externo: boolean }[];
+
+/**
+ * Campos del formulario de contacto. `ancho` ocupa las dos columnas: el correo
+ * es largo y así las filas quedan sin huecos.
+ */
+const CAMPOS_CONTACTO = [
+  { id: "nombre", label: "Nombre", type: "text", autoComplete: "name", max: 80, req: true, ancho: false },
+  { id: "empresa", label: "Empresa u organización", type: "text", autoComplete: "organization", max: 100, req: false, ancho: false },
+  { id: "correo", label: "Correo electrónico", type: "email", autoComplete: "email", max: 120, req: true, ancho: true },
+  { id: "telefono", label: "Teléfono", type: "tel", autoComplete: "tel", max: 30, req: false, ancho: false },
+  { id: "cantidad", label: "Cantidad aproximada", type: "text", autoComplete: "off", max: 40, req: false, ancho: false },
+] as const;
+
 export default function Home() {
+  const [estado, setEstado] = useState<"listo" | "enviando" | "ok" | "error">("listo");
+  const [errorEnvio, setErrorEnvio] = useState("");
+
+  async function enviarSolicitud(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    // Se guarda antes del await: React deja currentTarget en null al salir del manejador.
+    const formulario = e.currentTarget;
+    const datos = Object.fromEntries(new FormData(formulario));
+
+    setEstado("enviando");
+    setErrorEnvio("");
+    try {
+      const res = await fetch("/api/contacto", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(datos),
+      });
+      const cuerpo = await res.json().catch(() => ({}));
+      if (!res.ok || !cuerpo.ok) throw new Error(cuerpo.error || "No pudimos enviar tu solicitud.");
+      formulario.reset();
+      setEstado("ok");
+    } catch (err) {
+      setErrorEnvio(err instanceof Error ? err.message : "No pudimos enviar tu solicitud.");
+      setEstado("error");
+    }
+  }
+
   return (
     <div className="bg-[#f7f6f2] text-[#0f1e2b]">
       <a
@@ -49,7 +111,8 @@ export default function Home() {
         <div className={`${wrap} flex items-center justify-between py-2`}>
           <a href="#inicio" className="flex items-center gap-4">
             <Image src="/logo.png" alt="DTG Bordados, ir al inicio" width={84} height={90} priority className="h-[72px] w-auto md:h-[88px]" />
-            <span className="hidden text-base font-black uppercase tracking-[0.3em] lg:block">
+            {/* Entre 1024 y 1280 no cabe junto a los atajos; el propio logo ya dice DTG Bordados. */}
+            <span className="hidden text-base font-black uppercase tracking-[0.3em] xl:block">
               DTG <span style={{ color: GOLD }}>Bordados</span>
             </span>
           </a>
@@ -66,13 +129,42 @@ export default function Home() {
               </a>
             ))}
           </nav>
-          <a
-            href="#contacto"
-            className="rounded-full px-6 py-2.5 text-sm font-bold text-white shadow-md transition-transform hover:scale-105"
-            style={{ background: TEAL }}
-          >
-            Cotizar
-          </a>
+          <div className="flex items-center gap-4">
+            {HEADER_LINKS.length > 0 && (
+              <div className="hidden items-center gap-2 lg:flex">
+                {HEADER_LINKS.map((s) => (
+                  <a
+                    key={s.label}
+                    href={s.href}
+                    aria-label={s.label}
+                    title={s.label}
+                    {...(s.externo && { target: "_blank", rel: "noopener noreferrer" })}
+                    className="grid h-9 w-9 place-items-center rounded-full border border-slate-200 text-slate-500 transition-colors hover:border-[#199cb5] hover:text-[#199cb5]"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      className="h-[18px] w-[18px]"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden
+                    >
+                      <path d={s.d} />
+                    </svg>
+                  </a>
+                ))}
+              </div>
+            )}
+            <a
+              href="#contacto"
+              className="rounded-full px-6 py-2.5 text-sm font-bold text-white shadow-md transition-transform hover:scale-105"
+              style={{ background: TEAL }}
+            >
+              Cotizar
+            </a>
+          </div>
         </div>
       </header>
 
@@ -536,35 +628,27 @@ export default function Home() {
 
           <motion.form
             {...reveal}
-            onSubmit={(e) => {
-              e.preventDefault();
-              const f = new FormData(e.currentTarget);
-              const v = (k: string) => String(f.get(k) ?? "").trim();
-              const msg =
-                `Hola, soy ${v("nombre")}${v("empresa") ? ` de ${v("empresa")}` : ""}. ${v("mensaje").replace(/[.!?]*$/, ".")}` +
-                (v("cantidad") ? ` Cantidad aproximada: ${v("cantidad")}.` : "") +
-                (v("telefono") ? ` Mi teléfono: ${v("telefono")}.` : "");
-              window.open(waLink(msg), "_blank", "noopener,noreferrer");
-            }}
+            onSubmit={enviarSolicitud}
             className="grid gap-5 rounded-3xl border-2 border-dashed border-[#199cb5]/40 bg-[#fcf9f2] p-6 md:grid-cols-2 md:p-8"
           >
-            {[
-              ["nombre", "Nombre", "text", "name", 80, true],
-              ["empresa", "Empresa u organización", "text", "organization", 100, false],
-              ["telefono", "Teléfono", "tel", "tel", 30, false],
-              ["cantidad", "Cantidad aproximada", "text", "off", 40, false],
-            ].map(([id, label, type, ac, max, req]) => (
-              <div key={id as string}>
-                <label htmlFor={id as string} className="mb-1.5 block text-sm font-semibold text-[#0f1e2b]">
-                  {label as string}
+            {/* Campo trampa: oculto para las personas, lo rellenan los robots. */}
+            <div className="hidden" aria-hidden>
+              <label htmlFor="web">No rellenar</label>
+              <input id="web" name="web" type="text" tabIndex={-1} autoComplete="off" />
+            </div>
+
+            {CAMPOS_CONTACTO.map((campo) => (
+              <div key={campo.id} className={campo.ancho ? "md:col-span-2" : undefined}>
+                <label htmlFor={campo.id} className="mb-1.5 block text-sm font-semibold text-[#0f1e2b]">
+                  {campo.label}
                 </label>
                 <input
-                  id={id as string}
-                  name={id as string}
-                  type={type as string}
-                  autoComplete={ac as string}
-                  maxLength={max as number}
-                  required={req as boolean}
+                  id={campo.id}
+                  name={campo.id}
+                  type={campo.type}
+                  autoComplete={campo.autoComplete}
+                  maxLength={campo.max}
+                  required={campo.req}
                   className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition-colors focus:border-[#199cb5] focus:ring-2 focus:ring-[#199cb5]/20"
                 />
               </div>
@@ -584,12 +668,33 @@ export default function Home() {
             </div>
             <div className="md:col-span-2">
               <button
-                className="w-full rounded-full py-3.5 font-bold text-white shadow-md transition-transform hover:scale-[1.01]"
+                disabled={estado === "enviando"}
+                className="w-full rounded-full py-3.5 font-bold text-white shadow-md transition-transform hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100"
                 style={{ background: "#12707f" }}
               >
-                Enviar solicitud
+                {estado === "enviando" ? "Enviando…" : "Enviar solicitud"}
               </button>
-              <p className="mt-3 text-center text-xs text-slate-500">Se abrirá WhatsApp con tu solicitud lista para enviar.</p>
+
+              {/* aria-live para que un lector de pantalla anuncie el resultado */}
+              <div aria-live="polite" className="mt-3 text-center text-xs">
+                {estado === "ok" && (
+                  <p className="font-semibold text-[#12707f]">
+                    ¡Gracias! Recibimos tu solicitud y te respondemos con una cotización.
+                  </p>
+                )}
+                {estado === "error" && (
+                  <p className="font-semibold text-red-600">
+                    {errorEnvio}{" "}
+                    <a href={waLink()} target="_blank" rel="noopener noreferrer" className="underline">
+                      Escríbenos por WhatsApp
+                    </a>
+                    .
+                  </p>
+                )}
+                {(estado === "listo" || estado === "enviando") && (
+                  <p className="text-slate-500">Tu solicitud llega a nuestro correo de ventas. Te respondemos con una cotización.</p>
+                )}
+              </div>
             </div>
           </motion.form>
         </div>
@@ -607,6 +712,11 @@ export default function Home() {
             {CONTACT.phone && (
               <a href={`tel:+${CONTACT.phone.replace(/\D/g, "")}`} className="block hover:text-[#199cb5]">
                 Tel. +{CONTACT.phone.replace(/^(\d{3})(\d{4})(\d{4})$/, "$1 $2-$3")}
+              </a>
+            )}
+            {CONTACT.email && (
+              <a href={`mailto:${CONTACT.email}`} className="block hover:text-[#199cb5]">
+                {CONTACT.email}
               </a>
             )}
             {CONTACT.instagram && (

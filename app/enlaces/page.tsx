@@ -23,6 +23,7 @@ const SERVICES = [
 const ICONS = {
   wa: "M3 21l1.6-4.7A8.5 8.5 0 1 1 8 19.6L3 21zm5.6-12c.2 2.7 2.9 5.4 5.6 5.6l1.3-1.3-2-1-1 .8c-.9-.4-1.9-1.4-2.3-2.3l.8-1-1-2L8.6 9z",
   ig: "M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4zm5 5a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm5.5-2.2h.01",
+  mail: "M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6zm0 1 9 6 9-6",
   ph: "M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z",
   pin: "M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11zm0-8.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z",
   web: "M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zm-9 9h18M12 3c2.5 2.5 3.5 5.5 3.5 9S14.5 18.5 12 21c-2.5-2.5-3.5-5.5-3.5-9S9.5 5.5 12 3z",
@@ -41,6 +42,7 @@ export default function Enlaces() {
   const social = [
     CONTACT.whatsapp && { href: waLink(), label: "WhatsApp", d: ICONS.wa },
     CONTACT.instagram && { href: `https://instagram.com/${CONTACT.instagram}`, label: "Instagram", d: ICONS.ig },
+    CONTACT.email && { href: `mailto:${CONTACT.email}`, label: "Correo", d: ICONS.mail },
     CONTACT.phone && { href: `tel:${CONTACT.phone}`, label: "Llamar", d: ICONS.ph },
   ].filter(Boolean) as { href: string; label: string; d: string }[];
 
@@ -117,6 +119,19 @@ export default function Enlaces() {
             </span>
             <span className="text-slate-300">→</span>
           </a>
+
+          {CONTACT.email && (
+            <a href={`mailto:${CONTACT.email}`} className={card}>
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl text-white" style={{ background: TEAL }}>
+                <Icon d={ICONS.mail} />
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block font-bold">Correo</span>
+                <span className="block truncate text-xs text-slate-500">{CONTACT.email}</span>
+              </span>
+              <span className="text-slate-300">→</span>
+            </a>
+          )}
 
           {CONTACT.instagram && (
             <a href={`https://instagram.com/${CONTACT.instagram}`} className={card}>
