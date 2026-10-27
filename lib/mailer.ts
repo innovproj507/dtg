@@ -17,6 +17,8 @@ const env = {
   pass: process.env.SMTP_PASS ?? "",
   from: process.env.SMTP_FROM ?? "",
   to: process.env.CONTACT_TO ?? CONTACT.email,
+  // Copia oculta: el destinatario principal no ve estas direcciones. Varias, separadas por coma.
+  bcc: process.env.CONTACT_BCC ?? "",
 };
 
 /** Sin estos cuatro datos no se puede enviar nada; la ruta responde 503 y lo registra. */
@@ -53,6 +55,7 @@ export async function enviarCorreo({ asunto, texto, html, responderA }: Correo) 
     // por eso nunca se pone aquí el correo del visitante, que va en replyTo.
     from: env.from || `"DTG Bordados" <${env.user}>`,
     to: env.to,
+    ...(env.bcc && { bcc: env.bcc }),
     subject: asunto,
     text: texto,
     html,
