@@ -73,15 +73,24 @@ const CAMPOS_CONTACTO = [
 export default function Home() {
   const [estado, setEstado] = useState<"listo" | "enviando" | "ok" | "error">("listo");
   const [errorEnvio, setErrorEnvio] = useState("");
+  // Si el correo falla, el cliente puede mandar lo mismo por WhatsApp sin volver a escribirlo.
+  const [mensajeWa, setMensajeWa] = useState("");
 
   async function enviarSolicitud(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     // Se guarda antes del await: React deja currentTarget en null al salir del manejador.
     const formulario = e.currentTarget;
     const datos = Object.fromEntries(new FormData(formulario));
+    const v = (k: string) => String(datos[k] ?? "").trim();
+    const resumenWa =
+      `Hola, soy ${v("nombre")}${v("empresa") ? ` de ${v("empresa")}` : ""}. ${v("mensaje").replace(/[.!?]*$/, ".")}` +
+      (v("cantidad") ? ` Cantidad aproximada: ${v("cantidad")}.` : "") +
+      (v("telefono") ? ` Mi teléfono: ${v("telefono")}.` : "") +
+      (v("correo") ? ` Mi correo: ${v("correo")}.` : "");
 
     setEstado("enviando");
     setErrorEnvio("");
+    setMensajeWa("");
     try {
       const res = await fetch("/api/contacto", {
         method: "POST",
@@ -89,11 +98,13 @@ export default function Home() {
         body: JSON.stringify(datos),
       });
       const cuerpo = await res.json().catch(() => ({}));
+      if (res.status === 503) throw new Error("El envío por correo no está disponible en este momento.");
       if (!res.ok || !cuerpo.ok) throw new Error(cuerpo.error || "No pudimos enviar tu solicitud.");
       formulario.reset();
       setEstado("ok");
     } catch (err) {
       setErrorEnvio(err instanceof Error ? err.message : "No pudimos enviar tu solicitud.");
+      setMensajeWa(resumenWa);
       setEstado("error");
     }
   }
@@ -685,8 +696,8 @@ export default function Home() {
                 {estado === "error" && (
                   <p className="font-semibold text-red-600">
                     {errorEnvio}{" "}
-                    <a href={waLink()} target="_blank" rel="noopener noreferrer" className="underline">
-                      Escríbenos por WhatsApp
+                    <a href={waLink(mensajeWa || undefined)} target="_blank" rel="noopener noreferrer" className="underline">
+                      Envíanos tu solicitud por WhatsApp
                     </a>
                     .
                   </p>
