@@ -10,7 +10,7 @@ const CAMPOS = [
   { id: "correo", etiqueta: "Correo electrónico", max: 120, obligatorio: true },
   { id: "telefono", etiqueta: "Teléfono", max: 30, obligatorio: false },
   { id: "cantidad", etiqueta: "Cantidad aproximada", max: 40, obligatorio: false },
-  { id: "mensaje", etiqueta: "Qué necesita", max: 800, obligatorio: true },
+  { id: "mensaje", etiqueta: "Mensaje", max: 800, obligatorio: true },
 ] as const;
 
 /**
