@@ -335,18 +335,14 @@ export default function SiteHeader() {
                 <IcoLibro />
                 Historia familiar
               </a>
-              <a href="#taller" className="hidden items-center gap-2 whitespace-nowrap py-2 text-[15px] font-bold transition-colors hover:text-[#199cb5] 2xl:flex" style={{ color: DEEP }}>
-                <IcoAguja />
-                Nuestro taller
-              </a>
             </nav>
 
             {/* panel derecho (como "Iniciar sesión / carrito" de la referencia) */}
             <div className="flex items-center gap-4 md:px-6" style={{ background: undefined }}>
-              <div className="hidden h-full items-center gap-5 px-6 md:flex" style={{ background: PALE }}>
+              <div className="hidden h-full shrink-0 items-center gap-5 px-6 md:flex" style={{ background: PALE }}>
                 {CONTACT.whatsapp && (
-                  <a href={waLink()} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-[15px] font-bold" style={{ color: DEEP }}>
-                    <IcoWhatsApp className="h-5 w-5 text-[#1fae5a]" />
+                  <a href={waLink()} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 whitespace-nowrap text-[15px] font-bold transition-colors hover:text-[#f26a1b]" style={{ color: DEEP }}>
+                    <IcoWhatsApp className="h-5 w-5 shrink-0 text-[#1fae5a]" />
                     {telefono}
                   </a>
                 )}
