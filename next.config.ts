@@ -31,6 +31,16 @@ const securityHeaders = [
   ...(isProd ? [{ key: "Strict-Transport-Security", value: "max-age=31536000" }] : []),
 ];
 
+/**
+ * Caché pensada para que nadie vea una versión vieja del sitio:
+ *  - Páginas: el navegador y Cloudflare siempre preguntan al servidor (ETag: si no cambió, responde 304 sin descargar).
+ *  - Imágenes y video: 1 hora y luego revalidan. Sin "stale-while-revalidate": una foto reemplazada no se sigue mostrando días.
+ *  - /_next/static: archivos con hash en el nombre; Next ya los marca como inmutables.
+ * Si reemplazas una foto, ponle un nombre nuevo: así ninguna caché tiene la anterior.
+ */
+const noCachePaginas = { key: "Cache-Control", value: "public, max-age=0, must-revalidate" };
+const cacheMedios = { key: "Cache-Control", value: "public, max-age=3600, must-revalidate" };
+
 const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
@@ -38,15 +48,11 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       { source: "/:path*", headers: securityHeaders },
-      // imágenes y video con nombre fijo: caché de 1 día, revalidando en segundo plano
-      {
-        source: "/:dir(fotos|video)/:file*",
-        headers: [{ key: "Cache-Control", value: "public, max-age=86400, stale-while-revalidate=604800" }],
-      },
-      {
-        source: "/(logo.png|og.jpg|icon.png|apple-icon.png)",
-        headers: [{ key: "Cache-Control", value: "public, max-age=86400, stale-while-revalidate=604800" }],
-      },
+      // páginas (todo lo que no sea estático, medios ni API)
+      { source: "/((?!_next/|media/|video/|api/|.*\\..*).*)", headers: [noCachePaginas] },
+      { source: "/media/:file*", headers: [cacheMedios] },
+      { source: "/video/:file*", headers: [cacheMedios] },
+      { source: "/(logo.png|og.jpg|icon.png|apple-icon.png)", headers: [cacheMedios] },
     ];
   },
 };

@@ -11,7 +11,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: LAST_UPDATE,
       changeFrequency: "monthly",
       priority: 1,
-      images: [`${SITE.url}/fotos/banner-historia.jpg`, `${SITE.url}/fotos/panama.jpg`, `${SITE.url}/fotos/zsk.jpg`],
+      images: [`${SITE.url}/media/banner-historia.jpg`, `${SITE.url}/media/panama.jpg`, `${SITE.url}/media/zsk.jpg`],
     },
     { url: `${SITE.url}/enlaces`, lastModified: LAST_UPDATE, changeFrequency: "yearly", priority: 0.3 },
   ];

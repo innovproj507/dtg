@@ -50,7 +50,7 @@ export function jsonLd() {
         url: SITE.url,
         description: SITE.description,
         logo: { "@type": "ImageObject", url: `${SITE.url}/logo.png`, width: 384, height: 411 },
-        image: [`${SITE.url}${SITE.ogImage}`, `${SITE.url}/fotos/banner-historia.jpg`],
+        image: [`${SITE.url}${SITE.ogImage}`, `${SITE.url}/media/banner-historia.jpg`],
         foundingDate: SITE.founded,
         slogan: "El arte del bordado, una historia de familia",
         areaServed: { "@type": "Country", name: "Panamá" },

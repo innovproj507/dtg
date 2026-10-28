@@ -12,10 +12,10 @@ const GOLD = "#d4a03c";
 const INK = "#0f1e2b";
 
 const SERVICES = [
-  ["Bordado de logos", "Relieve real con hilo de poliéster y rayón de brillo duradero. Ideal para uniformes y merchandising.", "/fotos/servicio-gorra.jpg"],
-  ["Personalización", "Nombres, cargos y detalles individuales en cada prenda, con tipografías nítidas.", "/fotos/foto8.jpg"],
-  ["Producción por lotes", "Control de color y calidad pieza por pieza, con entregas programadas.", "/fotos/zsk.jpg"],
-  ["Digitalización de arte", "Convertimos tu logo en un mapa de puntadas optimizado para el mejor resultado.", "/fotos/digitalizacion.jpg"],
+  ["Bordado de logos", "Relieve real con hilo de poliéster y rayón de brillo duradero. Ideal para uniformes y merchandising.", "/media/servicio-gorra.jpg"],
+  ["Personalización", "Nombres, cargos y detalles individuales en cada prenda, con tipografías nítidas.", "/media/foto8.jpg"],
+  ["Producción por lotes", "Control de color y calidad pieza por pieza, con entregas programadas.", "/media/zsk.jpg"],
+  ["Digitalización de arte", "Convertimos tu logo en un mapa de puntadas optimizado para el mejor resultado.", "/media/digitalizacion.jpg"],
 ];
 const STEPS = [
   ["Digitalizamos", "Convertimos tu logo en un mapa de puntadas."],
@@ -184,7 +184,7 @@ export default function Home() {
       <section id="inicio" className="relative overflow-hidden bg-[#0f1e2b]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/fotos/banner-historia.jpg"
+          src="/media/banner-historia.jpg"
           alt=""
           aria-hidden
           fetchPriority="high"
@@ -308,7 +308,7 @@ export default function Home() {
               <div className="md:sticky md:top-28">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/fotos/panama.jpg"
+                  src="/media/panama.jpg"
                   alt="Mapa de Panamá bordado a máquina sobre tela dorada"
                   width={1200}
                   height={1500}
@@ -361,7 +361,7 @@ export default function Home() {
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/fotos/camisas-lino.jpg"
+                src="/media/camisas-lino.jpg"
                 alt="Camisa de lino blanca con bordado artesanal geométrico en el pecho"
                 width={800}
                 height={1000}
@@ -376,8 +376,8 @@ export default function Home() {
               className="relative col-span-2 aspect-square overflow-hidden rounded-2xl bg-black shadow-lg md:col-span-1 md:row-span-2 md:aspect-auto"
             >
               <video
-                src="/video/25-anos.mp4?v=2"
-                poster="/video/25-anos.jpg?v=2"
+                src="/video/25-anos.mp4?v=3"
+                poster="/video/25-anos.jpg?v=3"
                 className="h-full w-full object-cover"
                 autoPlay
                 muted
@@ -389,15 +389,15 @@ export default function Home() {
             </motion.div>
 
             {[
-              ["/fotos/foto5.jpg", "aspect-[4/3] md:aspect-auto", "Conos de hilo en la máquina"],
-              ["/fotos/foto6.jpg", "aspect-[4/3] md:aspect-auto", "Agujas y tensores de la bordadora"],
+              ["/media/foto5.jpg", "aspect-[4/3] md:aspect-auto", "Conos de hilo en la máquina"],
+              ["/media/foto6.jpg", "aspect-[4/3] md:aspect-auto", "Agujas y tensores de la bordadora"],
               [
-                "/fotos/taller-vertical.jpg",
+                "/media/taller-vertical.jpg",
                 "aspect-[3/5] md:row-span-2 md:aspect-auto",
                 "Aguja de bordadora sobre un bordado en punto de cruz",
               ],
               [
-                "/fotos/foto7.jpg",
+                "/media/foto7.jpg",
                 "aspect-[3/5] md:col-span-2 md:row-span-2 md:aspect-auto",
                 "Paleta de hilos de colores en el taller",
               ],
@@ -423,13 +423,13 @@ export default function Home() {
           <div className="mt-4 grid gap-4 md:grid-cols-2">
             {[
               {
-                src: "/fotos/detalles-bordado.jpg",
+                src: "/media/detalles-bordado.jpg",
                 alt: "Detalles de bordado floral en el cuello de una camisa y en el bolsillo de una camisa verde",
                 href: "#contacto",
                 external: false,
               },
               {
-                src: "/fotos/polos-bordados.jpg",
+                src: "/media/polos-bordados.jpg",
                 alt: "Polos bordados: detalles que marcan estilo. Cotizar por WhatsApp",
                 href: waLink("Hola, quiero cotizar polos bordados"),
                 external: true,
@@ -506,7 +506,7 @@ export default function Home() {
             <div className="relative h-48 overflow-hidden md:h-auto md:min-h-[220px]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/fotos/servicio-dtf.jpg"
+                src="/media/servicio-dtf.jpg"
                 alt="Impresión digital DTF a todo color sobre textil"
                 width={1200}
                 height={800}
@@ -543,7 +543,7 @@ export default function Home() {
       {/* PROCESO */}
       <section id="proceso" className="relative overflow-hidden py-20 md:py-28" style={{ background: INK }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/fotos/foto6.jpg" alt="" aria-hidden loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-25" />
+        <img src="/media/foto6.jpg" alt="" aria-hidden loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-25" />
         <div className="absolute inset-0" style={{ background: `linear-gradient(90deg, ${INK} 25%, ${INK}99 100%)` }} />
         <div className={`${wrap} relative`}>
           <motion.div {...reveal} className="max-w-2xl text-white">
