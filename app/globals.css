@@ -50,5 +50,5 @@ body {
 @keyframes wa-pulse { 0% { transform: scale(1); opacity: .55; } 100% { transform: scale(1.7); opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .wa-pulse { animation: none; } }
 
-section[id] { scroll-margin-top: 96px; }
+section[id], #dtf { scroll-margin-top: 84px; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .marquee, .hoop, .hoop-rev, .progress { animation: none; } }

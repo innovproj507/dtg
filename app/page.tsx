@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import { CONTACT, waLink } from "@/lib/contact";
+import SiteHeader from "@/components/SiteHeader";
 import { motion } from "framer-motion";
 
 
@@ -35,28 +36,6 @@ const reveal = {
 const wrap = "mx-auto w-full max-w-7xl px-6 md:px-10";
 const eyebrow = "text-xs font-bold uppercase tracking-[0.3em]";
 const h2 = "mt-3 text-3xl font-black tracking-tight md:text-5xl";
-
-/** Trazados de icono: los mismos que usa /enlaces, para que se vean igual en todo el sitio. */
-const ICONS = {
-  wa: "M3 21l1.6-4.7A8.5 8.5 0 1 1 8 19.6L3 21zm5.6-12c.2 2.7 2.9 5.4 5.6 5.6l1.3-1.3-2-1-1 .8c-.9-.4-1.9-1.4-2.3-2.3l.8-1-1-2L8.6 9z",
-  ig: "M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4zm5 5a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm5.5-2.2h.01",
-  mail: "M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6zm0 1 9 6 9-6",
-};
-
-/**
- * Atajos de la cabecera. Sólo aparece lo que esté relleno en lib/contact.ts,
- * igual que en /enlaces: si se vacía un dato, el icono desaparece solo.
- */
-const HEADER_LINKS = [
-  CONTACT.whatsapp && { href: waLink(), label: "Escribir por WhatsApp", d: ICONS.wa, externo: true },
-  CONTACT.instagram && {
-    href: `https://www.instagram.com/${CONTACT.instagram}`,
-    label: `Instagram @${CONTACT.instagram}`,
-    d: ICONS.ig,
-    externo: true,
-  },
-  CONTACT.email && { href: `mailto:${CONTACT.email}`, label: `Escribir a ${CONTACT.email}`, d: ICONS.mail, externo: false },
-].filter(Boolean) as { href: string; label: string; d: string; externo: boolean }[];
 
 /**
  * Campos del formulario de contacto. `ancho` ocupa las dos columnas: el correo
@@ -117,67 +96,7 @@ export default function Home() {
       >
         Saltar al contenido
       </a>
-      {/* NAV */}
-      <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/90 backdrop-blur-lg">
-        <div className={`${wrap} flex items-center justify-between py-2`}>
-          <a href="#inicio" className="flex items-center gap-4">
-            <Image src="/logo.png" alt="DTG Bordados, ir al inicio" width={84} height={90} priority className="h-[72px] w-auto md:h-[88px]" />
-            {/* Entre 1024 y 1280 no cabe junto a los atajos; el propio logo ya dice DTG Bordados. */}
-            <span className="hidden text-base font-black uppercase tracking-[0.3em] xl:block">
-              DTG <span style={{ color: GOLD }}>Bordados</span>
-            </span>
-          </a>
-          <nav aria-label="Principal" className="hidden gap-9 text-sm font-semibold text-slate-600 md:flex">
-            {[
-              ["Historia", "#nosotros"],
-              ["Taller", "#taller"],
-              ["Servicios", "#servicios"],
-              ["Proceso", "#proceso"],
-              ["Contacto", "#contacto"],
-            ].map(([l, h]) => (
-              <a key={h} href={h} className="transition-colors hover:text-[#199cb5]">
-                {l}
-              </a>
-            ))}
-          </nav>
-          <div className="flex items-center gap-4">
-            {HEADER_LINKS.length > 0 && (
-              <div className="hidden items-center gap-2 lg:flex">
-                {HEADER_LINKS.map((s) => (
-                  <a
-                    key={s.label}
-                    href={s.href}
-                    aria-label={s.label}
-                    title={s.label}
-                    {...(s.externo && { target: "_blank", rel: "noopener noreferrer" })}
-                    className="grid h-9 w-9 place-items-center rounded-full border border-slate-200 text-slate-500 transition-colors hover:border-[#199cb5] hover:text-[#199cb5]"
-                  >
-                    <svg
-                      viewBox="0 0 24 24"
-                      className="h-[18px] w-[18px]"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      aria-hidden
-                    >
-                      <path d={s.d} />
-                    </svg>
-                  </a>
-                ))}
-              </div>
-            )}
-            <a
-              href="#contacto"
-              className="rounded-full px-6 py-2.5 text-sm font-bold text-white shadow-md transition-transform hover:scale-105"
-              style={{ background: TEAL }}
-            >
-              Cotizar
-            </a>
-          </div>
-        </div>
-      </header>
+      <SiteHeader />
 
       <main id="contenido">
       {/* HERO */}
@@ -500,6 +419,7 @@ export default function Home() {
 
           {/* Impresión digital DTF */}
           <motion.div
+            id="dtf"
             {...reveal}
             className="group mt-6 grid overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all hover:shadow-xl md:grid-cols-[1fr_1.4fr]"
           >
